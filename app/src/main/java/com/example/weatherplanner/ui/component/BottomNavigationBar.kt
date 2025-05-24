@@ -9,7 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.weatherplanner.navigation.BottomNavItem
+import com.example.weatherplanner.navigation.NavBarItems
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -17,7 +17,7 @@ fun BottomNavigationBar(navController: NavController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
-        BottomNavItem.bottomItems.forEach { item ->
+        NavBarItems.BarItems.forEach { item ->
             NavigationBarItem(
                 selected = currentRoute == item.route,
                 onClick = {
@@ -34,7 +34,7 @@ fun BottomNavigationBar(navController: NavController) {
                 label = { Text(item.label) },
                 icon = {
                     Icon(
-                        painter = painterResource(id = item.icon),
+                        painter = painterResource(id = if (currentRoute == item.route) item.selectedIcon else item.icon),
                         contentDescription = item.label
                     )
                 }

@@ -8,9 +8,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherplanner.navigation.NavigationGraph
+import com.example.weatherplanner.navigation.Routes
 import com.example.weatherplanner.ui.component.BottomNavigationBar
 import com.example.weatherplanner.ui.theme.WeatherPlannerTheme
 
@@ -21,12 +26,31 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherPlannerTheme {
+//                val navController = rememberNavController()
+//                Scaffold(
+//                    bottomBar = { BottomNavigationBar(navController) }
+//                ) { innerPadding ->
+//                    Box(modifier = Modifier.padding(innerPadding)) {
+//                        NavigationGraph(navController = navController)
+//                    }
+//                }
                 val navController = rememberNavController()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute by remember(navBackStackEntry) {
+                    derivedStateOf {
+                        Routes.getRoute(navBackStackEntry?.destination?.route)
+                    }
+                }
+
                 Scaffold(
-                    bottomBar = { BottomNavigationBar(navController) }
+                    bottomBar = {
+                        if (currentRoute.isRoot) {
+                            BottomNavigationBar(navController)
+                        }
+                    }
                 ) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        NavigationGraph(navController = navController)
+                        NavigationGraph(navController)
                     }
                 }
             }
