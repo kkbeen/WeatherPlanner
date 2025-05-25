@@ -10,6 +10,9 @@ local.properties
 .externalNativeBuild/
 .cxx/
 
+# NAVER MAP API 관련
+secrets.properties
+
 # IDE 캐시, 로그, 시스템 파일
 .DS_Store
 *.log
