@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "843329641953",
+    "project_id": "weatherplanner-7fe1d",
+    "storage_bucket": "weatherplanner-7fe1d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:843329641953:android:1075ce59b9e5d86dcf46a0",
+        "android_client_info": {
+          "package_name": "com.example.weatherplanner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvFcgPYa9kO8mCc--yvA5LEXmNqbZj4Dg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
