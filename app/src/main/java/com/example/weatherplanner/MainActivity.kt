@@ -12,12 +12,14 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherplanner.navigation.NavigationGraph
 import com.example.weatherplanner.navigation.Routes
 import com.example.weatherplanner.ui.component.BottomNavigationBar
 import com.example.weatherplanner.ui.theme.WeatherPlannerTheme
+import com.example.weatherplanner.viewmodel.WeatherViewModel
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -25,6 +27,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+
             WeatherPlannerTheme {
 //                val navController = rememberNavController()
 //                Scaffold(
@@ -34,6 +38,7 @@ class MainActivity : ComponentActivity() {
 //                        NavigationGraph(navController = navController)
 //                    }
 //                }
+                val weatherViewModel: WeatherViewModel = viewModel()
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute by remember(navBackStackEntry) {
@@ -50,7 +55,10 @@ class MainActivity : ComponentActivity() {
                     }
                 ) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        NavigationGraph(navController)
+                        NavigationGraph(
+                            navController = navController,
+                            weatherViewModel = weatherViewModel
+                        )
                     }
                 }
             }
