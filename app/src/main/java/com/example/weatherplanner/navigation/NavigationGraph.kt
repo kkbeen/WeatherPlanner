@@ -11,9 +11,10 @@ import com.example.weatherplanner.ui.map.MapScreen
 import com.example.weatherplanner.ui.schedule.AddScheduleScreen
 import com.example.weatherplanner.ui.schedule.ScheduleScreen
 import com.example.weatherplanner.ui.schedule.ScheduleViewModel
+import com.example.weatherplanner.viewmodel.WeatherViewModel
 
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherViewModel) {
     NavHost(navController, startDestination = Routes.Home.route) {
         composable(Routes.Home.route) { HomeScreen() }
 
