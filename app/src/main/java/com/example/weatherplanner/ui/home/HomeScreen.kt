@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,7 +35,6 @@ fun HomeScreen(viewModel: WeatherViewModel = viewModel()) {
     val context = LocalContext.current
     val weather = viewModel.weather.collectAsState().value
 
-    // 위치 권한 및 날씨 가져오기
     LaunchedEffect(Unit) {
         val locationClient = LocationServices.getFusedLocationProviderClient(context)
         if (ActivityCompat.checkSelfPermission(
@@ -91,10 +89,4 @@ fun HomeScreen(viewModel: WeatherViewModel = viewModel()) {
 
         WeatherStatus(weather)
     }
-}
-
-@Preview
-@Composable
-private fun HomeScreenPreview() {
-    HomeScreen()
 }
