@@ -1,8 +1,10 @@
 package com.example.weatherplanner.ui.schedule
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.example.weatherplanner.data.model.Schedule
+import com.example.weatherplanner.data.model.repository.ScheduleRepository
 
 class ScheduleViewModel : ViewModel() {
 
@@ -18,5 +20,17 @@ class ScheduleViewModel : ViewModel() {
     // (선택) 일정 삭제
     fun removeSchedule(id: String) {
         _scheduleList.removeAll { it.id == id }
+    }
+
+    fun loadSchedulesFromFirebase() {
+        ScheduleRepository.fetchSchedules(
+            onSuccess = { list ->
+                _scheduleList.clear()
+                _scheduleList.addAll(list)
+            },
+            onFailure = { e ->
+                Log.e("Firebase", "❌ 일정 불러오기 실패", e)
+            }
+        )
     }
 }
