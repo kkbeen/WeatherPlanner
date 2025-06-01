@@ -39,6 +39,11 @@ android {
     buildFeatures {
         compose = true
     }
+
+    packagingOptions {
+        exclude("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
+    }
+
 }
 
 dependencies {
@@ -63,6 +68,8 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.androidx.material)
     implementation(libs.play.services.location)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.identity.jvm)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
