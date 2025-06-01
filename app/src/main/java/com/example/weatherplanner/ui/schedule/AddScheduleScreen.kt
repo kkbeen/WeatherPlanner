@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.weatherplanner.R
 import com.example.weatherplanner.data.model.Schedule
+import com.example.weatherplanner.data.model.repository.ScheduleRepository
 import com.example.weatherplanner.ui.component.TimePickerDialog
 import java.time.Instant
 import java.time.ZoneId
@@ -121,6 +122,7 @@ fun AddScheduleScreen(
                         location = location
                     )
                     viewModel.addSchedule(schedule)
+                    ScheduleRepository.saveSchedule(schedule) // Firebase에 저장
                     navController.popBackStack()
                 },
                 enabled = title.isNotBlank() && selectedDate.isNotBlank() && location.isNotBlank(),
