@@ -71,6 +71,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation("com.google.accompanist:accompanist-permissions:0.31.5-beta")
+
+
     //Naver Map
     implementation("com.naver.maps:map-sdk:3.21.0")
 }

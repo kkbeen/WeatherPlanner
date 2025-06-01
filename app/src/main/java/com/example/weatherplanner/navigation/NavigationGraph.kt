@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.weatherplanner.ui.PlaceRecommendationScreen
 import com.example.weatherplanner.ui.home.HomeScreen
 import com.example.weatherplanner.ui.map.MapScreen
 import com.example.weatherplanner.ui.schedule.AddScheduleScreen
@@ -34,6 +35,10 @@ fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherV
             }
             val viewModel = viewModel<ScheduleViewModel>(parentEntry)
             AddScheduleScreen(navController, viewModel)
+        }
+
+        composable(Routes.PlaceRecommendation.route) {
+            PlaceRecommendationScreen()   // 앞서 만든 장소추천 화면 컴포저블
         }
     }
 }

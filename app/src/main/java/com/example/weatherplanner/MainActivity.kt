@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -20,6 +21,7 @@ import com.example.weatherplanner.navigation.NavigationGraph
 import com.example.weatherplanner.navigation.Routes
 import com.example.weatherplanner.ui.component.BottomNavigationBar
 import com.example.weatherplanner.ui.theme.WeatherPlannerTheme
+import com.example.weatherplanner.viewmodel.PlaceViewModel
 import com.example.weatherplanner.viewmodel.WeatherViewModel
 
 class MainActivity : ComponentActivity() {
@@ -31,14 +33,7 @@ class MainActivity : ComponentActivity() {
 
 
             WeatherPlannerTheme {
-//                val navController = rememberNavController()
-//                Scaffold(
-//                    bottomBar = { BottomNavigationBar(navController) }
-//                ) { innerPadding ->
-//                    Box(modifier = Modifier.padding(innerPadding)) {
-//                        NavigationGraph(navController = navController)
-//                    }
-//                }
+                val placeViewModel: PlaceViewModel = viewModel()
                 val weatherViewModel: WeatherViewModel = viewModel()
                 val navController = rememberNavController()
                 val navBackStackEntry by navController.currentBackStackEntryAsState()

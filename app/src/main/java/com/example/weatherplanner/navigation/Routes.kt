@@ -5,6 +5,7 @@ sealed class Routes(val route: String, val isRoot: Boolean = true) {
     object Map : Routes("map")
     object Schedule : Routes("schedule")
     object AddSchedule : Routes("add_schedule", isRoot = false)
+    object PlaceRecommendation : Routes("place_recommendation")
 
     companion object {
         fun getRoute(route: String?): Routes {

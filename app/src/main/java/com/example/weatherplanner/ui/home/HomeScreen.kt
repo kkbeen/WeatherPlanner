@@ -29,7 +29,6 @@ import com.example.weatherplanner.ui.home.component.WeatherStatus
 import com.example.weatherplanner.viewmodel.WeatherViewModel
 import com.google.android.gms.location.LocationServices
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: WeatherViewModel = viewModel()) {
     val context = LocalContext.current
