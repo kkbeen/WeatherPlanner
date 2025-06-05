@@ -110,7 +110,7 @@ fun HomeScreen(viewModel: WeatherViewModel = viewModel()) {
 
         WeatherStatus(weather)
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(15.dp))
 
         HourlyWeatherRow(
             hourlyList = weather?.forecast?.forecastday?.firstOrNull()?.hour
