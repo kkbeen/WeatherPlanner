@@ -8,7 +8,9 @@ data class Place(
     val place_name: String,
     val road_address_name: String,
     val distance: String,
-    val x: String,  // 경도
-    val y: String   // 위도
+    val x: String,
+    val y: String,
+    val category_group_code: String,
+    val category_name: String
 )
 

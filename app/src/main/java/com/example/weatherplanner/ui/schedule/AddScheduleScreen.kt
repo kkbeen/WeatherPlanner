@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import java.util.UUID
 import com.example.weatherplanner.R
 import com.example.weatherplanner.data.model.Schedule
 import com.example.weatherplanner.data.model.repository.ScheduleRepository
@@ -41,10 +42,12 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun AddScheduleScreen(
     navController: NavController,
-    viewModel: ScheduleViewModel = viewModel()
+    viewModel: ScheduleViewModel = viewModel(),
+    placeName: String = "",
+    placeAddress: String = ""
 ) {
-    var title by remember { mutableStateOf("") }
-    var location by remember { mutableStateOf("") }
+    var title by remember { mutableStateOf(placeName) }
+    var location by remember { mutableStateOf(placeAddress) }
 
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
@@ -116,13 +119,13 @@ fun AddScheduleScreen(
             Button(
                 onClick = {
                     val schedule = Schedule(
+                        id = UUID.randomUUID().toString(),  // 고유 id 생성
                         title = title,
                         date = selectedDate,
                         time = selectedTime,
                         location = location
                     )
-                    viewModel.addSchedule(schedule)
-                    ScheduleRepository.saveSchedule(schedule) // Firebase에 저장
+                    viewModel.addSchedule(schedule) // 이 함수 안에서 저장+불러오기 동작
                     navController.popBackStack()
                 },
                 enabled = title.isNotBlank() && selectedDate.isNotBlank() && location.isNotBlank(),
@@ -130,6 +133,7 @@ fun AddScheduleScreen(
             ) {
                 Text("일정 추가하기")
             }
+
         }
     }
 

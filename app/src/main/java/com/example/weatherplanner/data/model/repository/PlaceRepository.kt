@@ -13,7 +13,7 @@ class PlaceRepository {
 
         for (category in categories) {
             val result = RetrofitKakaoInstance.api.searchPlacesByCategory(
-                apiKey = "KakaoAK YOUR_API_KEY",
+                apiKey = "KakaoAK 2b1ee159643f483302cc365fa09589c4",
                 categoryCode = category,
                 longitude = lon,
                 latitude = lat

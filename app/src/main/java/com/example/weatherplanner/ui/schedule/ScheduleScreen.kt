@@ -1,17 +1,27 @@
 package com.example.weatherplanner.ui.schedule
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,25 +29,40 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherplanner.navigation.Routes
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(
     navController: NavController,
     viewModel: ScheduleViewModel = viewModel()
 ) {
-
-    LaunchedEffect(Unit) {
-        viewModel.loadSchedulesFromFirebase()
-    }
-
     val schedules = viewModel.scheduleList
 
+    // 스낵바 상태 생성
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("일정 관리") },
+                actions = {
+                    IconButton(onClick = {
+                        viewModel.loadSchedulesFromFirebase()
+                        scope.launch {
+                            snackbarHostState.showSnackbar("일정을 새로고침했습니다.")
+                        }
+                    }) {
+                        Icon(Icons.Default.Refresh, contentDescription = "새로고침")
+                    }
+                }
+            )
+        },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    navController.navigate(Routes.AddSchedule.route)
-                }
+                onClick = { navController.navigate(Routes.AddSchedule.route) }
             ) {
                 Icon(Icons.Default.Add, contentDescription = "일정 추가")
             }
@@ -58,13 +83,32 @@ fun ScheduleScreen(
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                items(schedules.size) { index ->
-                    ScheduleCard(schedule = schedules[index])
+                items(schedules) { schedule ->
+                    ScheduleCard(
+                        schedule = schedule,
+                        onEditClick = {
+                            navController.navigate(
+                                Routes.EditSchedule.createRoute(
+                                    schedule.id,
+                                    schedule.title,
+                                    schedule.date,
+                                    schedule.time,
+                                    schedule.location
+                                )
+                            )
+                        },
+                        onDeleteClick = {
+                            viewModel.removeSchedule(schedule.id)
+                            scope.launch { snackbarHostState.showSnackbar("일정을 삭제했습니다.") }
+                        }
+                    )
+
                 }
             }
         }
     }
 }
+
 
 @Preview
 @Composable
