@@ -20,7 +20,9 @@ import com.example.weatherplanner.viewmodel.WeatherViewModel
 @Composable
 fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherViewModel) {
     NavHost(navController, startDestination = Routes.Home.route) {
-        composable(Routes.Home.route) { HomeScreen() }
+        composable(Routes.Home.route) {
+            HomeScreen(navController = navController)
+        }
 
         composable(Routes.Map.route) { MapScreen() }
 
