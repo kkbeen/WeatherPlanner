@@ -33,12 +33,12 @@ import com.example.weatherplanner.utils.getWeatherIconRes
 import com.example.weatherplanner.utils.translateWeatherCondition
 
 @Composable
-fun WeatherStatus(weather: WeatherApiResponse?) {
+fun WeatherStatus(weather: WeatherApiResponse?, height: Int = 100) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp),
+            .height(height.dp),
     ) {
         if (weather != null) {
             val current = weather.current
