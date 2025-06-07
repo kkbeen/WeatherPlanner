@@ -12,10 +12,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherplanner.data.model.Place
+import com.example.weatherplanner.data.model.WeatherApiResponse
+import com.example.weatherplanner.ui.place.getRecommendationMessage
 
 @Composable
 fun PlaceRecommendationSection(
     places: List<Place>,
+    weatherInfo: WeatherApiResponse?,
     onPlaceClick: (Place) -> Unit
 ) {
     Column {
@@ -32,6 +35,11 @@ fun PlaceRecommendationSection(
                     Text(text = place.place_name, fontWeight = FontWeight.SemiBold)
                     Text(text = place.road_address_name, fontSize = 12.sp, color = Color.Gray)
                     Text(text = "거리: ${place.distance}m", fontSize = 12.sp, color = Color.Gray)
+                    Text(
+                        text = getRecommendationMessage(place, weatherInfo),
+                        fontSize = 12.sp,
+                        color = Color(0xFF2A8AF6) // 원하는 색상으로!
+                    )
                 }
             }
         }

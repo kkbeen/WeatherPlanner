@@ -70,6 +70,8 @@ fun HomeScreen(
         code == "ALL" || code in availableCategoryCodes
     }
 
+    val weatherInfo by weatherViewModel.weather.collectAsState()
+
     LaunchedEffect(Unit) {
         val locationClient = LocationServices.getFusedLocationProviderClient(context)
         if (ActivityCompat.checkSelfPermission(
@@ -176,6 +178,7 @@ fun HomeScreen(
 
             PlaceRecommendationSection(
                 places = filteredPlaces,
+                weatherInfo = weatherInfo,
                 onPlaceClick = { place ->
                     navController?.let {
                         val name = Uri.encode(place.place_name)

@@ -22,6 +22,7 @@ import com.example.weatherplanner.viewmodel.PlaceViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.weatherplanner.data.model.Place
+import com.example.weatherplanner.data.model.WeatherApiResponse
 import com.example.weatherplanner.data.model.algorithm.LocationFetcher
 import com.example.weatherplanner.data.model.algorithm.UserPreferences
 import com.example.weatherplanner.navigation.Routes
@@ -57,6 +58,7 @@ fun PlaceRecommendationScreen(
 
     PlaceListScreen(
         places = places,
+        weatherInfo = weatherInfo,
         onPlaceClick = { place ->
             // 장소명과 주소를 경로 파라미터로 전달 (인코딩 주의)
             val encodedPlaceName = Uri.encode(place.place_name)
@@ -70,11 +72,12 @@ fun PlaceRecommendationScreen(
 @Composable
 fun PlaceListScreen(
     places: List<Place>,
+    weatherInfo: WeatherApiResponse?,
     onPlaceClick: (Place) -> Unit
 ) {
     LazyColumn {
         items(places) { place ->
-            PlaceItem(place = place, onClick = { onPlaceClick(place) })
+            PlaceItem(place = place, weatherInfo = weatherInfo, onClick = { onPlaceClick(place) })
         }
     }
 }
@@ -82,6 +85,7 @@ fun PlaceListScreen(
 @Composable
 fun PlaceItem(
     place: Place,
+    weatherInfo: WeatherApiResponse?,
     onClick: () -> Unit
 ) {
     Column(
@@ -92,5 +96,7 @@ fun PlaceItem(
         Text(place.place_name, style = MaterialTheme.typography.titleMedium)
         Text(place.road_address_name, style = MaterialTheme.typography.bodyMedium)
         Text("거리: ${place.distance}m", style = MaterialTheme.typography.bodySmall)
+        // 추천 메시지 추가
+        Text(getRecommendationMessage(place, weatherInfo), style = MaterialTheme.typography.bodySmall)
     }
 }
