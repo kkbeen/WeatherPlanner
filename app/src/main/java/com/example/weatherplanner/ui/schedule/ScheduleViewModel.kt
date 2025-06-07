@@ -12,15 +12,28 @@ class ScheduleViewModel : ViewModel() {
     private val _scheduleList = mutableStateListOf<Schedule>()
     val scheduleList: List<Schedule> get() = _scheduleList
 
-    // 일정 추가
-    fun addSchedule(schedule: Schedule) {
-        _scheduleList.add(schedule)
+    init {
+        loadSchedulesFromFirebase()
     }
 
-    // (선택) 일정 삭제
-    fun removeSchedule(id: String) {
-        _scheduleList.removeAll { it.id == id }
+    // 일정 추가
+    fun addSchedule(schedule: Schedule) {
+        ScheduleRepository.saveSchedule(schedule) // Firebase에 저장
+        loadSchedulesFromFirebase() // 저장 후 전체 동기화 (다시 불러오기)
     }
+
+    // 일정 삭제
+    fun removeSchedule(id: String) {
+        // 리스트 직접 삭제 X!
+        ScheduleRepository.deleteSchedule(id,
+            onSuccess = {
+                Log.d("Schedule", "삭제 성공")
+                loadSchedulesFromFirebase() // 성공 후 동기화!
+            },
+            onFailure = { e -> Log.e("Schedule", "삭제 실패", e) }
+        )
+    }
+
 
     fun loadSchedulesFromFirebase() {
         ScheduleRepository.fetchSchedules(
@@ -33,4 +46,11 @@ class ScheduleViewModel : ViewModel() {
             }
         )
     }
+
+    fun updateSchedule(updated: Schedule) {
+        // 리스트 직접 수정 X!
+        ScheduleRepository.saveSchedule(updated)
+        loadSchedulesFromFirebase() // 저장 후 동기화!
+    }
+
 }

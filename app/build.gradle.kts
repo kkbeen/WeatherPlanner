@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.play.services.location)
     implementation(libs.coil.compose)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
