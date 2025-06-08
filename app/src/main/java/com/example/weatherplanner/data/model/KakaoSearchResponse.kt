@@ -13,4 +13,3 @@ data class Place(
     val category_group_code: String,
     val category_name: String
 )
-

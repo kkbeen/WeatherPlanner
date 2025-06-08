@@ -43,7 +43,7 @@ import com.example.weatherplanner.data.model.algorithm.UserPreferences
 import com.example.weatherplanner.navigation.Routes
 import com.example.weatherplanner.ui.home.component.CategorySelector
 import com.example.weatherplanner.ui.home.component.HourlyWeatherRow
-import com.example.weatherplanner.ui.home.component.PlaceRecommendationSection
+import com.example.weatherplanner.ui.home.component.PlaceCarouselSection
 import com.example.weatherplanner.ui.home.component.WeatherStatus
 import com.example.weatherplanner.ui.home.component.categoryMap
 import com.example.weatherplanner.viewmodel.PlaceViewModel
@@ -175,8 +175,7 @@ fun HomeScreen(
                 onCategorySelected = { selectedCategoryCode = it },
                 categoryOptions = filteredCategoryMap
             )
-
-            PlaceRecommendationSection(
+            PlaceCarouselSection(
                 places = filteredPlaces,
                 weatherInfo = weatherInfo,
                 onPlaceClick = { place ->
@@ -187,83 +186,9 @@ fun HomeScreen(
                     }
                 }
             )
+
         }
     }
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp)
-//    ) {
-//        TopAppBar(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(0.dp),
-//            backgroundColor = Color.Unspecified,
-//            elevation = 1.dp,
-//            title = {
-//                Icon(
-//                    modifier = Modifier.size(28.dp),
-//                    painter = painterResource(R.drawable.weather_planner_logo),
-//                    contentDescription = "weatherplanner logo",
-//                    tint = Color.Unspecified
-//                )
-//                Spacer(modifier = Modifier.width(8.dp))
-//                Text(
-//                    text = "오늘 뭐해?",
-//                    style = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp),
-//                    color = Color.Black
-//                )
-//            },
-//            actions = {
-//                Row(
-//                    modifier = Modifier.padding(20.dp),
-//                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-//                ) {
-//                    Icon(
-//                        modifier = Modifier.size(24.dp),
-//                        painter = painterResource(id = R.drawable.ic_home_location),
-//                        contentDescription = "location icon",
-//                        tint = Color.Unspecified
-//                    )
-//                    if (weather != null) {
-//                        Text(text = "${weather.location.name}", style = TextStyle(fontSize = 14.sp, color = Color.Black))
-//                    }
-//                    Spacer(modifier = Modifier.width(8.dp))
-//                    Icon(
-//                        modifier = Modifier.size(24.dp),
-//                        painter = painterResource(id = R.drawable.ic_home_bell),
-//                        contentDescription = "home bell icon",
-//                        tint = Color.Unspecified
-//                    )
-//                }
-//            }
-//        )
-//
-//        Spacer(Modifier.height(16.dp))
-//        WeatherStatus(weather)
-//        Spacer(Modifier.height(16.dp))
-//        HourlyWeatherRow(
-//            hourlyList = weather?.forecast?.forecastday?.firstOrNull()?.hour
-//        )
-//        Spacer(Modifier.height(20.dp))
-//
-//        CategorySelector(
-//            selectedCategory = selectedCategoryCode,
-//            onCategorySelected = { selectedCategoryCode = it },
-//            categoryOptions = filteredCategoryMap
-//        )
-//
-//        PlaceRecommendationSection(
-//            places = filteredPlaces,
-//            onPlaceClick = { place ->
-//                navController?.let {
-//                    val name = Uri.encode(place.place_name)
-//                    val address = Uri.encode(place.road_address_name)
-//                    it.navigate("${Routes.AddSchedule.route}/$name/$address")
-//                }
-//            }
-//        )
-//    }
 }
 
 @Preview
