@@ -43,7 +43,7 @@ import com.example.weatherplanner.data.model.algorithm.UserPreferences
 import com.example.weatherplanner.navigation.Routes
 import com.example.weatherplanner.ui.home.component.CategorySelector
 import com.example.weatherplanner.ui.home.component.HourlyWeatherRow
-import com.example.weatherplanner.ui.home.component.PlaceRecommendationSection
+import com.example.weatherplanner.ui.home.component.PlaceCarouselSection
 import com.example.weatherplanner.ui.home.component.WeatherStatus
 import com.example.weatherplanner.ui.home.component.categoryMap
 import com.example.weatherplanner.viewmodel.PlaceViewModel
@@ -175,8 +175,7 @@ fun HomeScreen(
                 onCategorySelected = { selectedCategoryCode = it },
                 categoryOptions = filteredCategoryMap
             )
-
-            PlaceRecommendationSection(
+            PlaceCarouselSection(
                 places = filteredPlaces,
                 weatherInfo = weatherInfo,
                 onPlaceClick = { place ->
@@ -187,6 +186,7 @@ fun HomeScreen(
                     }
                 }
             )
+
         }
     }
 }
