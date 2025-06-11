@@ -1,6 +1,5 @@
 package com.example.weatherplanner.ui.schedule
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,22 +8,24 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -39,9 +40,11 @@ fun ScheduleScreen(
 ) {
     val schedules = viewModel.scheduleList
 
-    // 스낵바 상태 생성
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
+    // 날짜별로 그룹핑 후 시간순 정렬
+    val groupedSchedules = schedules.groupBy { it.date }
 
     Scaffold(
         topBar = {
@@ -59,7 +62,7 @@ fun ScheduleScreen(
                 }
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navController.navigate(Routes.AddSchedule.route) }
@@ -68,6 +71,7 @@ fun ScheduleScreen(
             }
         }
     ) { innerPadding ->
+
         if (schedules.isEmpty()) {
             Box(
                 modifier = Modifier
@@ -83,26 +87,44 @@ fun ScheduleScreen(
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                items(schedules) { schedule ->
-                    ScheduleCard(
-                        schedule = schedule,
-                        onEditClick = {
-                            navController.navigate(
-                                Routes.EditSchedule.createRoute(
-                                    schedule.id,
-                                    schedule.title,
-                                    schedule.date,
-                                    schedule.time,
-                                    schedule.location
-                                )
-                            )
-                        },
-                        onDeleteClick = {
-                            viewModel.removeSchedule(schedule.id)
-                            scope.launch { snackbarHostState.showSnackbar("일정을 삭제했습니다.") }
-                        }
-                    )
+                groupedSchedules.forEach { (date, scheduleList) ->
 
+                    stickyHeader {
+                        Card(
+                            modifier = Modifier.padding(top = 8.dp, start = 8.dp)
+                        ){
+                            Text(
+                                text = "$date",
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                            )
+                        }
+
+                    }
+
+                    items(scheduleList) { schedule ->
+                        ScheduleCard(
+                            schedule = schedule,
+                            onEditClick = {
+                                navController.navigate(
+                                    Routes.EditSchedule.createRoute(
+                                        schedule.id,
+                                        schedule.title,
+                                        schedule.date,
+                                        schedule.time,
+                                        schedule.location
+                                    )
+                                )
+                            },
+                            onDeleteClick = {
+                                viewModel.removeSchedule(schedule.id)
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("일정을 삭제했습니다.")
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }

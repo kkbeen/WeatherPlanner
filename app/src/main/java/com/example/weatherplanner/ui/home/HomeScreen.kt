@@ -110,7 +110,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(0.dp),
-                backgroundColor = Color.Unspecified,
+                backgroundColor = Color.White,
                 elevation = 1.dp,
                 title = {
                     Icon(

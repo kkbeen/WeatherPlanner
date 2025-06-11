@@ -25,7 +25,8 @@ class ScheduleViewModel : ViewModel() {
     // 일정 삭제
     fun removeSchedule(id: String) {
         // 리스트 직접 삭제 X!
-        ScheduleRepository.deleteSchedule(id,
+        ScheduleRepository.deleteSchedule(
+            id,
             onSuccess = {
                 Log.d("Schedule", "삭제 성공")
                 loadSchedulesFromFirebase() // 성공 후 동기화!
@@ -39,7 +40,9 @@ class ScheduleViewModel : ViewModel() {
         ScheduleRepository.fetchSchedules(
             onSuccess = { list ->
                 _scheduleList.clear()
-                _scheduleList.addAll(list)
+                _scheduleList.addAll(
+                    list.sortedWith(compareBy({ it.date }, { it.time }))
+                )
             },
             onFailure = { e ->
                 Log.e("Firebase", "❌ 일정 불러오기 실패", e)
