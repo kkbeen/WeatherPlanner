@@ -23,4 +23,11 @@ class PlaceRepository {
 
         return allResults
     }
+
+    suspend fun geocodeAddress(address: String): Pair<Double, Double>? {
+        val apiKey = "KakaoAK 2b1ee159643f483302cc365fa09589c4" // 실제 키로 교체
+        val response = RetrofitKakaoInstance.api.searchAddress(apiKey, address)
+        val doc = response.documents.firstOrNull()
+        return if (doc != null) Pair(doc.y.toDouble(), doc.x.toDouble()) else null
+    }
 }
