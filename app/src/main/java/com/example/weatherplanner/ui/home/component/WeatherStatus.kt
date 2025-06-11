@@ -33,7 +33,7 @@ import com.example.weatherplanner.utils.getWeatherIconRes
 import com.example.weatherplanner.utils.translateWeatherCondition
 
 @Composable
-fun WeatherStatus(weather: WeatherApiResponse?, height: Int = 100) {
+fun WeatherStatus(weather: WeatherApiResponse?, height: Int = 110) {
 
     Card(
         modifier = Modifier
@@ -43,21 +43,15 @@ fun WeatherStatus(weather: WeatherApiResponse?, height: Int = 100) {
         if (weather != null) {
             val current = weather.current
             val iconRes = getWeatherIconRes(current.condition.text)
-            val iconUrl = "https:${current.condition.icon}"
             Row(
                 modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-//                Icon(
-//                    painter = painterResource(id = iconRes),
-//                    contentDescription = "Weather Icon",
-//                    modifier = Modifier.size(50.dp)
-//                )
                 Image(
-                    painter = rememberAsyncImagePainter(iconUrl),
+                    painter = rememberAsyncImagePainter(iconRes),
                     contentDescription = current.condition.text,
-                    modifier = Modifier.size(90.dp)
+                    modifier = Modifier.size(70.dp)
                 )
                 Row(
                     modifier = Modifier.padding(vertical = 10.dp)
