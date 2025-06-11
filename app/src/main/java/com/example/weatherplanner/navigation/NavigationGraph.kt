@@ -2,6 +2,7 @@ package com.example.weatherplanner.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -9,22 +10,52 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.weatherplanner.ui.home.HomeScreen
+import com.example.weatherplanner.ui.login.AuthCheckScreen
+import com.example.weatherplanner.ui.login.LoginScreen
+import com.example.weatherplanner.ui.login.SignUpScreen
 import com.example.weatherplanner.ui.map.MapScreen
 import com.example.weatherplanner.ui.place.PlaceRecommendationScreen
 import com.example.weatherplanner.ui.schedule.AddScheduleScreen
 import com.example.weatherplanner.ui.schedule.EditScheduleScreen
 import com.example.weatherplanner.ui.schedule.ScheduleScreen
 import com.example.weatherplanner.ui.schedule.ScheduleViewModel
+import com.example.weatherplanner.viewmodel.AuthViewModel
 import com.example.weatherplanner.viewmodel.WeatherViewModel
 
 @Composable
 fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherViewModel) {
-    NavHost(navController, startDestination = Routes.Home.route) {
+    NavHost(navController, startDestination = "auth_check") {
+
+        composable(Routes.AuthCheck.route) {
+            AuthCheckScreen(navController)
+        }
+
+        composable(Routes.Login.route) {
+            val context = LocalContext.current
+            val viewModel = viewModel<AuthViewModel>()
+
+            LoginScreen(
+                navController = navController,
+                onLoginSuccess = {
+                    navController.navigate("home") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                },
+                viewModel = viewModel
+            )
+        }
+
+        composable(Routes.SignUp.route) {
+            SignUpScreen(navController)
+        }
+
         composable(Routes.Home.route) {
             HomeScreen(navController = navController)
         }
 
-        composable(Routes.Map.route) { MapScreen() }
+        composable(Routes.Map.route) {
+            MapScreen()
+        }
 
         composable(Routes.Schedule.route) { backStackEntry ->
             val parentEntry = remember(backStackEntry) {
@@ -73,7 +104,7 @@ fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherV
                 navArgument("location") { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("scheduleId") ?: ""  // 수정!
+            val id = backStackEntry.arguments?.getString("scheduleId") ?: ""
             val title = backStackEntry.arguments?.getString("title") ?: ""
             val date = backStackEntry.arguments?.getString("date") ?: ""
             val time = backStackEntry.arguments?.getString("time") ?: ""
