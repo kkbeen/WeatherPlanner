@@ -66,6 +66,10 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.foundation)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -76,6 +80,9 @@ dependencies {
 
     //Naver Map
     implementation("com.naver.maps:map-sdk:3.21.0")
+
+    //Google Login
+    implementation(libs.play.services.auth)
 }
 
 secrets {
