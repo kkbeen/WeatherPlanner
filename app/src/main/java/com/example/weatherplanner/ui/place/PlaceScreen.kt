@@ -1,11 +1,21 @@
 package com.example.weatherplanner.ui.place
 
 
+import android.net.Uri
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,17 +25,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import android.net.Uri
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.weatherplanner.viewmodel.PlaceViewModel
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.weatherplanner.R
 import com.example.weatherplanner.data.model.Place
 import com.example.weatherplanner.data.model.WeatherApiResponse
 import com.example.weatherplanner.data.model.algorithm.LocationFetcher
 import com.example.weatherplanner.data.model.algorithm.UserPreferences
 import com.example.weatherplanner.navigation.Routes
+import com.example.weatherplanner.viewmodel.PlaceViewModel
 import com.example.weatherplanner.viewmodel.WeatherViewModel
 
 
@@ -47,7 +64,8 @@ fun PlaceRecommendationScreen(
         weatherViewModel.fetchWeather(lat, lon)
     }
 
-    val userPrefs = UserPreferences(preferredCategories = listOf("FD6", "CE7"))  // 사용자 선호 카테고리 직접 지정
+    val userPrefs =
+        UserPreferences(preferredCategories = listOf("FD6", "CE7"))  // 사용자 선호 카테고리 직접 지정
 
     LaunchedEffect(userLat, userLon, weatherInfo) {
         if (userLat != null && userLon != null && weatherInfo != null) {
@@ -75,9 +93,21 @@ fun PlaceListScreen(
     weatherInfo: WeatherApiResponse?,
     onPlaceClick: (Place) -> Unit
 ) {
-    LazyColumn {
-        items(places) { place ->
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        itemsIndexed(places) { index, place ->
             PlaceItem(place = place, weatherInfo = weatherInfo, onClick = { onPlaceClick(place) })
+            if (index < places.size - 1) {
+                Divider(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp), // 좌우 여백 줄 수 있음
+                    thickness = 1.dp,
+                    color = Color.LightGray
+                )
+            }
         }
     }
 }
@@ -88,15 +118,81 @@ fun PlaceItem(
     weatherInfo: WeatherApiResponse?,
     onClick: () -> Unit
 ) {
-    Column(
+    Row(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick() }
+            .clickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(place.place_name, style = MaterialTheme.typography.titleMedium)
-        Text(place.road_address_name, style = MaterialTheme.typography.bodyMedium)
-        Text("거리: ${place.distance}m", style = MaterialTheme.typography.bodySmall)
-        // 추천 메시지 추가
-        Text(getRecommendationMessage(place, weatherInfo), style = MaterialTheme.typography.bodySmall)
+        val iconPath = getCategoryIconRes(place.category_group_code)
+        Image(
+            painter = painterResource(id = iconPath),
+            contentDescription = null,
+            modifier = Modifier
+                .size(50.dp)
+                .padding(end = 8.dp),
+            contentScale = ContentScale.Fit
+        )
+        Spacer(modifier = Modifier.width(4.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(place.place_name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(getRecommendationMessage(place, weatherInfo), style = MaterialTheme.typography.bodySmall)
+            Spacer(modifier = Modifier.height(2.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("${place.distance}m", style = MaterialTheme.typography.bodySmall)
+                Spacer(
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .width(1.dp)
+                        .height(14.dp)
+                        .background(Color.Gray)
+                )
+                Text(place.road_address_name, style = MaterialTheme.typography.bodySmall)
+            }
+        }
     }
+
+}
+
+fun getCategoryIconRes(category: String): Int {
+    return when (category) {
+        "PM9" -> R.drawable.pharmacy
+        "PK6" -> R.drawable.parking_lot // 주차장
+        "BK9" -> R.drawable.bank // 은행
+        "CS2" -> R.drawable.convenience_store // 편의점
+        "FD6" -> R.drawable.food // 음식점
+        "OL7" -> R.drawable.gas_station // 주유소
+        "AD5" -> R.drawable.hotel // 호텔
+        "CT1" -> R.drawable.culture // 문화/영화
+        else -> R.drawable.location // 기본값 (없을 때)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PlaceItemPreview() {
+    val samplePlace = Place(
+        place_name = "테스트 장소",
+        road_address_name = "서울시 강남구 테헤란로 123",
+        distance = 500.toString(),
+        category_group_code = "FD6",
+        x = 1000.toString(),
+        y = 1000.toString(),
+        category_name = "음식점",
+    )
+
+    // WeatherApiResponse는 null 또는 테스트용 값 전달
+    PlaceItem(
+        place = samplePlace,
+        weatherInfo = null,
+        onClick = {}
+    )
 }
