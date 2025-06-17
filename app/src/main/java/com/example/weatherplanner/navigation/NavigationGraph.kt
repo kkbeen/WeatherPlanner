@@ -19,6 +19,7 @@ import com.example.weatherplanner.ui.schedule.AddScheduleScreen
 import com.example.weatherplanner.ui.schedule.EditScheduleScreen
 import com.example.weatherplanner.ui.schedule.ScheduleScreen
 import com.example.weatherplanner.ui.schedule.ScheduleViewModel
+import com.example.weatherplanner.ui.setting.SettingScreen
 import com.example.weatherplanner.viewmodel.AuthViewModel
 import com.example.weatherplanner.viewmodel.WeatherViewModel
 
@@ -55,6 +56,10 @@ fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherV
 
         composable(Routes.Map.route) {
             MapScreen()
+        }
+
+        composable(Routes.Setting.route) {
+            SettingScreen()
         }
 
         composable(Routes.Schedule.route) { backStackEntry ->
