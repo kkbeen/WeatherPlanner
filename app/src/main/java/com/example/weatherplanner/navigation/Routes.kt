@@ -6,6 +6,7 @@ sealed class Routes(val route: String, val isRoot: Boolean = true) {
     object Home : Routes("home")
     object Map : Routes("map")
     object Schedule : Routes("schedule")
+    object Setting : Routes("setting")
     object AddSchedule : Routes("add_schedule", isRoot = false)
     object PlaceRecommendation : Routes("place_recommendation")
     object EditSchedule : Routes("edit_schedule/{scheduleId}/{title}/{date}/{time}/{location}") {

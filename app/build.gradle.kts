@@ -83,6 +83,9 @@ dependencies {
 
     //Google Login
     implementation(libs.play.services.auth)
+
+    implementation(libs.firebase.messaging.ktx)
+
 }
 
 secrets {

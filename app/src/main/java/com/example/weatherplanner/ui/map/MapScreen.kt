@@ -1,5 +1,7 @@
 package com.example.weatherplanner.ui.map
 
+import android.content.pm.PackageManager
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weatherplanner.ui.map.component.NaverMapComponent
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -24,6 +27,9 @@ import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.example.weatherplanner.data.model.Place
 import com.example.weatherplanner.data.model.repository.PlaceRepository
 import com.example.weatherplanner.ui.schedule.ScheduleViewModel
+import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -68,6 +74,36 @@ fun MapScreen(
                     category_name = ""
                 )
                 places.add(place)
+            }
+        }
+    }
+
+    //강우 알림
+    LaunchedEffect(granted) {
+        if (granted) {
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                    if (location != null) {
+                        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnSuccessListener
+                        val db = FirebaseFirestore.getInstance()
+                        db.collection("users").document(uid)
+                            .update(
+                                mapOf(
+                                    "lat" to location.latitude,
+                                    "lon" to location.longitude
+                                )
+                            )
+                            .addOnSuccessListener {
+                                Log.d("Firestore", " 위치 저장 완료: (${location.latitude}, ${location.longitude})")
+                            }
+                    }
+                }
             }
         }
     }
