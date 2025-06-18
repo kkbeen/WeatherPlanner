@@ -1,5 +1,6 @@
 package com.example.weatherplanner.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherplanner.data.model.Place
@@ -25,9 +26,11 @@ class PlaceViewModel : ViewModel() {
         weatherInfo: WeatherApiResponse?,
         userPrefs: UserPreferences
     ) {
+        Log.d("PlaceViewModel", "loadRecommendedPlaces 호출: lat=$lat, lon=$lon, weatherInfo=$weatherInfo, userPrefs=$userPrefs")
         viewModelScope.launch {
             try {
                 val places = repository.searchMultipleCategories(lat, lon)
+                Log.d("PlaceViewModel", "카카오 API 장소 개수: ${places.size}")
                 val currentHour = LocalTime.now().hour
 
                 val ranked = places.map { place ->
@@ -35,9 +38,10 @@ class PlaceViewModel : ViewModel() {
                 }.sortedByDescending { it.score }
                     .map { it.place }
 
+                Log.d("PlaceViewModel", "추천 장소(랭킹 후) 개수: ${ranked.size}")
                 _places.value = ranked
             } catch (e: Exception) {
-                // 에러 처리
+                Log.e("PlaceViewModel", "추천 장소 로딩 실패", e)
             }
         }
     }

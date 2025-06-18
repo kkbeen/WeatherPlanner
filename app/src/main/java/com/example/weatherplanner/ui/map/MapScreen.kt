@@ -60,10 +60,19 @@ fun MapScreen(
     LaunchedEffect(schedules) {
         places.clear()
         for (schedule in schedules) {
-            val latLng = withContext(Dispatchers.IO) {
-                PlaceRepository().geocodeAddress(schedule.location)
+            val lat: Double?
+            val lon: Double?
+            if (schedule.latitude != null && schedule.longitude != null) {
+                lat = schedule.latitude
+                lon = schedule.longitude
+            } else {
+                val latLng = withContext(Dispatchers.IO) {
+                    PlaceRepository().geocodeAddress(schedule.location)
+                }
+                lat = latLng?.first
+                lon = latLng?.second
             }
-            latLng?.let { (lat, lon) ->
+            if (lat != null && lon != null) {
                 val place = Place(
                     place_name = schedule.title,
                     road_address_name = schedule.location,
