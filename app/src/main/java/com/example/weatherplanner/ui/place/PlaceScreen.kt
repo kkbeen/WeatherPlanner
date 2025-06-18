@@ -136,8 +136,7 @@ fun PlaceItem(
         )
         Spacer(modifier = Modifier.width(4.dp))
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.padding(end = 8.dp).fillMaxWidth()
         ) {
             Text(place.place_name, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(4.dp))
@@ -147,7 +146,7 @@ fun PlaceItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("${place.distance}m", style = MaterialTheme.typography.bodySmall)
+                Text("${place.distance}m", style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 2.dp))
                 Spacer(
                     modifier = Modifier
                         .padding(horizontal = 4.dp)
@@ -169,9 +168,10 @@ fun getCategoryIconRes(category: String): Int {
         "BK9" -> R.drawable.bank // 은행
         "CS2" -> R.drawable.convenience_store // 편의점
         "FD6" -> R.drawable.food // 음식점
+        "CE7" -> R.drawable.caffee // 카페
+        "CT1" -> R.drawable.culture // 문화/영화
         "OL7" -> R.drawable.gas_station // 주유소
         "AD5" -> R.drawable.hotel // 호텔
-        "CT1" -> R.drawable.culture // 문화/영화
         else -> R.drawable.location // 기본값 (없을 때)
     }
 }
