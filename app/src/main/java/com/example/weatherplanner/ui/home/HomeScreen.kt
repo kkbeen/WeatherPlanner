@@ -2,6 +2,7 @@ package com.example.weatherplanner.ui.home
 
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -145,7 +146,11 @@ fun HomeScreen(
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
-                            modifier = Modifier.size(24.dp),
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable {
+                                    navController?.navigate(Routes.Alarm.route)
+                                },
                             painter = painterResource(id = R.drawable.ic_home_bell),
                             contentDescription = "home bell icon",
                             tint = Color.Unspecified
