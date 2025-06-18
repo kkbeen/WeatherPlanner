@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +34,8 @@ fun ScheduleCard(
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
+    val clipboardManager = LocalClipboardManager.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -54,6 +59,12 @@ fun ScheduleCard(
             }
 
             Row {
+                IconButton(onClick = {
+                    val shareText = "일정: ${schedule.title}\n시간: ${schedule.time}\n장소: ${schedule.location}"
+                    clipboardManager.setText(AnnotatedString(shareText))
+                }) {
+                    Icon(Icons.Default.Share, contentDescription = "공유")
+                }
                 IconButton(onClick = onEditClick) {
                     Icon(Icons.Default.Edit, contentDescription = "수정")
                 }
@@ -62,7 +73,6 @@ fun ScheduleCard(
                 }
             }
         }
-
     }
 }
 

@@ -37,6 +37,11 @@ import com.example.weatherplanner.ui.component.TimePickerDialog
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import com.example.weatherplanner.data.model.repository.PlaceRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,6 +70,8 @@ fun AddScheduleScreen(
     val selectedTime = "${timePickerState.hour.toString().padStart(2, '0')}:${
         timePickerState.minute.toString().padStart(2, '0')
     }"
+
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -118,15 +125,28 @@ fun AddScheduleScreen(
 
             Button(
                 onClick = {
-                    val schedule = Schedule(
-                        id = UUID.randomUUID().toString(),  // 고유 id 생성
-                        title = title,
-                        date = selectedDate,
-                        time = selectedTime,
-                        location = location
-                    )
-                    viewModel.addSchedule(schedule) // 이 함수 안에서 저장+불러오기 동작
-                    navController.popBackStack()
+                    coroutineScope.launch {
+                        var latitude: Double? = null
+                        var longitude: Double? = null
+                        val latLng = withContext(Dispatchers.IO) {
+                            PlaceRepository().geocodeAddress(location)
+                        }
+                        latLng?.let { (lat, lon) ->
+                            latitude = lat
+                            longitude = lon
+                        }
+                        val schedule = Schedule(
+                            id = UUID.randomUUID().toString(),
+                            title = title,
+                            date = selectedDate,
+                            time = selectedTime,
+                            location = location,
+                            latitude = latitude,
+                            longitude = longitude
+                        )
+                        viewModel.addSchedule(schedule)
+                        navController.popBackStack()
+                    }
                 },
                 enabled = title.isNotBlank() && selectedDate.isNotBlank() && location.isNotBlank(),
                 modifier = Modifier.fillMaxWidth()
