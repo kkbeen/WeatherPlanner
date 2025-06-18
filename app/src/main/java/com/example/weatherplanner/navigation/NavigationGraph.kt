@@ -9,6 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.weatherplanner.ui.alarm.AlarmScreen
 import com.example.weatherplanner.ui.home.HomeScreen
 import com.example.weatherplanner.ui.login.AuthCheckScreen
 import com.example.weatherplanner.ui.login.LoginScreen
@@ -123,6 +124,18 @@ fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherV
                 initDate = date,
                 initTime = time,
                 initLocation = location
+            )
+        }
+
+        composable(Routes.Alarm.route) {
+            AlarmScreen(
+                navController = navController,
+                onAlarmClick = { alarmId ->
+                    // 여기에 알람 클릭 시 동작 추가
+                },
+                onDeleteClick = { alarmId ->
+                    // 여기에 알람 삭제 로직 추가
+                }
             )
         }
     }
