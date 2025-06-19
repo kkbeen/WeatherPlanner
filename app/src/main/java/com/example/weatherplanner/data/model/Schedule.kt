@@ -9,7 +9,8 @@ data class Schedule(
     val time: String = "",
     val location: String = "",
     val latitude: Double? = null,
-    val longitude: Double? = null
+    val longitude: Double? = null,
+    val startTime: String = ""   // 알림용 시간 추가
 ) {
-    constructor() : this("", "", "", "", "", null, null)
+    constructor() : this("", "", "", "", "", null, null,"")
 }

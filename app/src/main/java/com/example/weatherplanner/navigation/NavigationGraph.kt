@@ -20,9 +20,9 @@ import com.example.weatherplanner.ui.schedule.AddScheduleScreen
 import com.example.weatherplanner.ui.schedule.EditScheduleScreen
 import com.example.weatherplanner.ui.schedule.ScheduleScreen
 import com.example.weatherplanner.ui.schedule.ScheduleViewModel
-import com.example.weatherplanner.ui.setting.SettingScreen
 import com.example.weatherplanner.viewmodel.AuthViewModel
 import com.example.weatherplanner.viewmodel.WeatherViewModel
+
 
 @Composable
 fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherViewModel) {
@@ -57,10 +57,6 @@ fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherV
 
         composable(Routes.Map.route) {
             MapScreen()
-        }
-
-        composable(Routes.Setting.route) {
-            SettingScreen()
         }
 
         composable(Routes.Schedule.route) { backStackEntry ->
@@ -128,15 +124,11 @@ fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherV
         }
 
         composable(Routes.Alarm.route) {
-            AlarmScreen(
-                navController = navController,
-                onAlarmClick = { alarmId ->
-                    // 여기에 알람 클릭 시 동작 추가
-                },
-                onDeleteClick = { alarmId ->
-                    // 여기에 알람 삭제 로직 추가
-                }
-            )
+            AlarmScreen(navController = navController)
         }
+
+
+
+
     }
 }

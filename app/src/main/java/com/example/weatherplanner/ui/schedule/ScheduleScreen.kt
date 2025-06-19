@@ -89,7 +89,7 @@ fun ScheduleScreen(
             ) {
                 groupedSchedules.forEach { (date, scheduleList) ->
 
-                    stickyHeader {
+                    item { // stickyheader에서 변경
                         Card(
                             modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                         ){

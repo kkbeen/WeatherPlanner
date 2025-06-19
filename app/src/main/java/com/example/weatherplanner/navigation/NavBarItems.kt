@@ -27,12 +27,6 @@ object NavBarItems {
             label = "장소추천",
             icon = R.drawable.outline_add_location_24,       // 적절한 아이콘 리소스로 교체
             selectedIcon = R.drawable.baseline_add_location_24  // 선택된 상태 아이콘
-        ),
-        BarItem(
-            route = "setting",
-            label = "설정",
-            icon = R.drawable.outline_settings_24,
-            selectedIcon = R.drawable.baseline_settings_24
         )
     )
 }
