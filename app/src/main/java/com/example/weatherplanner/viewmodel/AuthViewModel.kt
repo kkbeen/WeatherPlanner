@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.example.weatherplanner.data.model.LoginUiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -38,6 +41,7 @@ class AuthViewModel : ViewModel() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+
                     val uid = auth.currentUser?.uid ?: return@addOnCompleteListener
                     val userData = mapOf(
                         "name" to name,

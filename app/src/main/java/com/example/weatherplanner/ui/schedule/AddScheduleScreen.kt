@@ -41,6 +41,7 @@ import com.example.weatherplanner.data.model.repository.PlaceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.weatherplanner.navigation.Routes
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,6 +71,8 @@ fun AddScheduleScreen(
     val selectedTime = "${timePickerState.hour.toString().padStart(2, '0')}:${
         timePickerState.minute.toString().padStart(2, '0')
     }"
+
+    val startTime = "${selectedDate}T${selectedTime}" //추가
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -142,10 +145,14 @@ fun AddScheduleScreen(
                             time = selectedTime,
                             location = location,
                             latitude = latitude,
-                            longitude = longitude
+                            longitude = longitude,
+                            startTime = startTime // 추가
                         )
                         viewModel.addSchedule(schedule)
-                        navController.popBackStack()
+                        navController.navigate(Routes.Schedule.route) {
+                            popUpTo(Routes.AddSchedule.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                 },
                 enabled = title.isNotBlank() && selectedDate.isNotBlank() && location.isNotBlank(),

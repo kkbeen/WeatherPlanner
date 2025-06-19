@@ -10,6 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.weatherplanner.navigation.NavBarItems
+import com.example.weatherplanner.navigation.Routes
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -23,12 +24,13 @@ fun BottomNavigationBar(navController: NavController) {
                 onClick = {
                     if (currentRoute != item.route) {
                         navController.navigate(item.route) {
-                            popUpTo(navController.graph.startDestinationId) {
+                            popUpTo(Routes.Home.route) {
                                 saveState = true
                             }
                             launchSingleTop = true
                             restoreState = true
                         }
+
                     }
                 },
                 label = { Text(item.label) },

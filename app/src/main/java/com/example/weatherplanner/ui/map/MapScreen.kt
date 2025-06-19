@@ -87,36 +87,6 @@ fun MapScreen(
         }
     }
 
-    //강우 알림
-    LaunchedEffect(granted) {
-        if (granted) {
-            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-
-            if (ActivityCompat.checkSelfPermission(
-                    context,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                    if (location != null) {
-                        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: return@addOnSuccessListener
-                        val db = FirebaseFirestore.getInstance()
-                        db.collection("users").document(uid)
-                            .update(
-                                mapOf(
-                                    "lat" to location.latitude,
-                                    "lon" to location.longitude
-                                )
-                            )
-                            .addOnSuccessListener {
-                                Log.d("Firestore", " 위치 저장 완료: (${location.latitude}, ${location.longitude})")
-                            }
-                    }
-                }
-            }
-        }
-    }
-
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally

@@ -56,6 +56,8 @@ fun EditScheduleScreen(
     var date by remember { mutableStateOf(initDate) }
     var time by remember { mutableStateOf(initTime) }
 
+    val startTime = "${date}T${time}" // 추가
+
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = try {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -142,7 +144,8 @@ fun EditScheduleScreen(
                             title = title,
                             date = date,
                             time = time,
-                            location = location
+                            location = location,
+                            startTime = startTime     //추가
                         )
                         viewModel.updateSchedule(updated)
                         navController.popBackStack()
