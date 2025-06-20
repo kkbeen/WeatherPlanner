@@ -150,7 +150,7 @@ fun AddScheduleScreen(
                         )
                         viewModel.addSchedule(schedule)
                         navController.navigate(Routes.Schedule.route) {
-                            popUpTo(Routes.AddSchedule.route) { inclusive = true }
+                            popUpTo(Routes.Schedule.route) { inclusive = true }
                             launchSingleTop = true
                         }
                     }

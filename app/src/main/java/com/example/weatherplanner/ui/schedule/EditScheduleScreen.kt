@@ -31,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.weatherplanner.data.model.Schedule
+import com.example.weatherplanner.navigation.Routes
 import com.example.weatherplanner.ui.component.TimePickerDialog
 import java.time.Instant
 import java.time.ZoneId
@@ -148,7 +149,10 @@ fun EditScheduleScreen(
                             startTime = startTime     //추가
                         )
                         viewModel.updateSchedule(updated)
-                        navController.popBackStack()
+                        navController.navigate(Routes.Schedule.route) {
+                            popUpTo(Routes.Schedule.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     },
                     modifier = Modifier.weight(1f),
                     enabled = title.isNotBlank() && date.isNotBlank() && time.isNotBlank() && location.isNotBlank()
@@ -159,7 +163,10 @@ fun EditScheduleScreen(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         viewModel.removeSchedule(id)
-                        navController.popBackStack()
+                        navController.navigate(Routes.Schedule.route) {
+                            popUpTo(Routes.Schedule.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                 ) {
                     Text("삭제")
