@@ -1,5 +1,11 @@
 package com.example.weatherplanner.service
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -9,6 +15,9 @@ import com.google.firebase.messaging.RemoteMessage
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.UUID
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
+import com.example.weatherplanner.MainActivity
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -57,7 +66,42 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .addOnFailureListener {
                 Log.e("FCM", "알림 저장 실패", it)
             }
+
+        // Notification 추가
+        sendNotification(title, body)
     }
 
+    private fun sendNotification(title: String, message: String) {
+        val channelId = "weatherplanner_alarm"
+        val notificationId = System.currentTimeMillis().toInt()
+
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(com.example.weatherplanner.R.drawable.ic_home_bell)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                channelId,
+                "알람 채널",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(notificationId, notificationBuilder.build())
+    }
 
 }
