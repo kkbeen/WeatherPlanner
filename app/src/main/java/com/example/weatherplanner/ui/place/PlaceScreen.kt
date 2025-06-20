@@ -1,6 +1,8 @@
 package com.example.weatherplanner.ui.place
 
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,13 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,13 +38,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.weatherplanner.R
 import com.example.weatherplanner.data.model.Place
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
 import com.example.weatherplanner.data.model.WeatherApiResponse
-import com.example.weatherplanner.data.model.algorithm.LocationFetcher
 import com.example.weatherplanner.data.model.algorithm.UserPreferences
 import com.example.weatherplanner.navigation.Routes
 import com.example.weatherplanner.viewmodel.PlaceViewModel
 import com.example.weatherplanner.viewmodel.WeatherViewModel
-
 
 @Composable
 fun PlaceRecommendationScreen(
@@ -54,22 +54,32 @@ fun PlaceRecommendationScreen(
 ) {
     val places by placeViewModel.places.collectAsState()
     val weatherInfo by weatherViewModel.weather.collectAsState()
+    val context = LocalContext.current
 
-    var userLat by remember { mutableStateOf<Double?>(null) }
-    var userLon by remember { mutableStateOf<Double?>(null) }
+    LaunchedEffect(Unit) { // key를 Unit으로 하여 최초 1회만 실행
+        val hasPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
-    LocationFetcher { lat, lon ->
-        userLat = lat
-        userLon = lon
-        weatherViewModel.fetchWeather(lat, lon)
+        if (hasPermission) {
+            val locationClient = LocationServices.getFusedLocationProviderClient(context)
+            locationClient.lastLocation.addOnSuccessListener { location ->
+                location?.let {
+                    weatherViewModel.fetchWeather(it.latitude, it.longitude)
+                }
+            }
+        }
     }
 
     val userPrefs =
-        UserPreferences(preferredCategories = listOf("FD6", "CE7"))  // 사용자 선호 카테고리 직접 지정
+        UserPreferences(preferredCategories = listOf("FD6", "CE7", "CT1"))  // 사용자 선호 카테고리 (문화시설 추가)
 
-    LaunchedEffect(userLat, userLon, weatherInfo) {
-        if (userLat != null && userLon != null && weatherInfo != null) {
-            placeViewModel.loadRecommendedPlaces(userLat!!, userLon!!, weatherInfo, userPrefs)
+    LaunchedEffect(weatherInfo) {
+        weatherInfo?.let {
+            val lat = it.location.lat
+            val lon = it.location.lon
+            placeViewModel.loadRecommendedPlaces(lat, lon, it, userPrefs)
         }
     }
 

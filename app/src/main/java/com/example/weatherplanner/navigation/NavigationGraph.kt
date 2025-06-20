@@ -97,7 +97,7 @@ fun NavigationGraph(navController: NavHostController, weatherViewModel: WeatherV
         }
 
         composable(
-            "edit_schedule/{scheduleId}/{title}/{date}/{time}/{location}",
+            Routes.EditSchedule.route,
             arguments = listOf(
                 navArgument("scheduleId") { type = NavType.StringType },
                 navArgument("title") { type = NavType.StringType },

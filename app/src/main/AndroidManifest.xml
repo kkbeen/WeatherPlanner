@@ -21,6 +21,9 @@
         <meta-data
             android:name="com.naver.maps.map.NCP_KEY_ID"
             android:value="${NAVER_CLIENT_ID}" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="2585dbb3355937502a87903bf5054af5"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -6,7 +6,7 @@ data class WeatherApiResponse(
     val forecast: Forecast
 )
 
-data class Location(val name: String, val localtime: String)
+data class Location(val name: String, val localtime: String, var lat: Double = 0.0, var lon: Double = 0.0)
 
 data class Current(
     val temp_c: Double,

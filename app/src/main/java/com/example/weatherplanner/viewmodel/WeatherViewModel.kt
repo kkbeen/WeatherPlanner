@@ -17,7 +17,10 @@ class WeatherViewModel : ViewModel() {
     fun fetchWeather(lat: Double, lon: Double) {
         viewModelScope.launch {
             try {
-                _weather.value = repository.getWeather(lat, lon)
+                val weatherResponse = repository.getWeather(lat, lon)
+                weatherResponse?.location?.lat = lat
+                weatherResponse?.location?.lon = lon
+                _weather.value = weatherResponse
             } catch (e: Exception) {
                 e.printStackTrace()
             }
