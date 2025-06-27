@@ -62,6 +62,8 @@ fun HomeScreen(
     val weather = weatherViewModel.weather.collectAsState().value
     val places = placeViewModel.places.collectAsState().value
 
+
+
     var userLat by remember { mutableStateOf<Double?>(null) }
     var userLon by remember { mutableStateOf<Double?>(null) }
 
